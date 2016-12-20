@@ -43,8 +43,8 @@
 
     <div class="part" v-repeat="part: parts">
         <p>{{ part.text }}</p>
-        <a href="#" class="likes"><i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{ part.like_count }}</span></a>
-        <a href="#" class="dislike"><i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{ part.dislike_count }}</span></a>
+        <a href="javascript:" v-on="click: onLike(part)" class="likes"><i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{ part.like_count }}</span></a>
+        <a href="javascript:" v-on="click: onDislike(part)" class="dislike"><i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{ part.dislike_count }}</span></a>
         <span class="pull-right label label-success">by {{ part.author }}</span>
         <div class="clearfix"></div>
         <hr>
@@ -57,7 +57,9 @@
         data: {
             parts: [],
             text: '',
-            author: ''
+            author: '',
+            like_count: 0,
+            dislike_count: 0
         },
 
         ready: function() {
@@ -87,19 +89,34 @@
                     url: "/api/part",
                     success: function(result) {
                         this.parts.push(result);
-                        this.author = ''
-                        this.text = ''
+                        this.author = '';
+                        this.text = '';
+                        this.like_count = 0;
+                        this.dislike_count = 0;
                     }
                 })
             },
 
-            onDelete: function (part) {
+            onLike: function (part) {
                 $.ajax({
                     context: part,
-                    type: "DELETE",
-                    url: "/api/part/" + part.id,
+                    type: "PUT",
+                    url: "/api/part/like/" + part.id,
+                    success: function(result) {
+                        this.like_count = result.like_count;
+                    }
                 })
-                this.parts.$remove(part);
+            },
+
+            onDislike: function (part) {
+                $.ajax({
+                    context: part,
+                    type: "PUT",
+                    url: "/api/part/dislike/" + part.id,
+                    success: function(result) {
+                        this.dislike_count = result.dislike_count;
+                    }
+                })
             }
         }
     })
