@@ -7,9 +7,11 @@
     <!-- CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
     <style>
-        body        { padding-top:30px; }
+        body        { padding-top:10px; }
         form        { padding-bottom:20px; }
         .part    { padding-bottom:20px; }
+        a.likes { margin-right: 10px; }
+        a.likes, a.dislike { text-decoration: none; }
     </style>
 
     <!-- JS -->
@@ -31,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            <textarea class="form-control input-sm" name="text" v-model="text" placeholder="Введите текст"></textarea>
+            <textarea rows="5" class="form-control textarea-sm" name="text" v-model="text" placeholder="Введите текст"></textarea>
         </div>
 
         <div class="form-group text-right">
@@ -40,9 +42,12 @@
     </form>
 
     <div class="part" v-repeat="part: parts">
-        <h3>Часть <small>by {{ part.author }}</h3>
         <p>{{ part.text }}</p>
-        <p><span class="btn btn-primary text-muted" v-on="click: onDelete(part)">Удалить</span></p>
+        <a href="#" class="likes"><i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{ part.like_count }}</span></a>
+        <a href="#" class="dislike"><i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{ part.dislike_count }}</span></a>
+        <span class="pull-right label label-success">by {{ part.author }}</span>
+        <div class="clearfix"></div>
+        <hr>
     </div>
 </div>
 <script type="text/javascript">

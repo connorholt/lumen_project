@@ -8,6 +8,8 @@ class Part extends Model
 {
     protected $fillable = [
         'author',
-        'text'
+        'text',
+        'like_count',
+        'dislike_count'
     ];
 }

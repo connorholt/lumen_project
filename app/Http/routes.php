@@ -4,4 +4,3 @@ $app->get('/', function() use ($app) {
 });
 $app->get('api/part', 'PartController@index');
 $app->post('api/part', 'PartController@store');
-$app->delete('api/part/{id}', 'PartController@destroy');
