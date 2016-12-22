@@ -41,6 +41,7 @@
         </div>
     </form>
 
+    Голосование {{ }} части:
     <div class="part" v-repeat="part: parts">
         <p>{{ part.text }}</p>
         <a href="javascript:" v-on="click: onLike(part)" class="likes"><i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{ part.like_count }}</span></a>
@@ -70,7 +71,7 @@
             getMessages: function() {
                 $.ajax({
                     context: this,
-                    url: "/api/part",
+                    url: "/api/vote/part",
                     success: function (result) {
                         this.$set("parts", result)
                     }

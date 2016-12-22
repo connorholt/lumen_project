@@ -20,6 +20,11 @@ class PartController extends BaseController
         return response()->json(Part::orderBy('created_at')->get());
     }
 
+    public function vote()
+    {
+        return response()->json(Part::orderBy('created_at')->onVote()->get());
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
