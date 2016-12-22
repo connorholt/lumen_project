@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Part extends Model
 {
@@ -37,11 +38,16 @@ class Part extends Model
 
     public static function getLastPartNumber()
     {
-        if (!self::$lastPartNumber) {
-            //self::$lastPartNumber =
+        return Cache::get('number');
+    }
+
+    public static function incLastPartNumber()
+    {
+        if (!self::getLastPartNumber()) {
+            Cache::store('redis')->put('number', 0);
         }
 
-        return self::$lastPartNumber;
+        Cache::increment('number');
     }
 
     /**
