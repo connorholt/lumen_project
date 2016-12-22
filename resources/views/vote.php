@@ -30,31 +30,17 @@
         <li role="presentation"><a href="/about">О проекте</a></li>
     </ul>
 
-    <div class="jumbotron">
-        <h2>Коллективная проза</h2>
-        <h4>Пишем произведение вместе</h4>
-    </div>
+    <h3>На голосовании</h3>
 
     <div class="part" v-repeat="part: parts">
         <p>{{ part.text }}</p>
+        <a href="javascript:" v-on="click: onLike(part)" class="likes"><i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{ part.like_count }}</span></a>
+        <a href="javascript:" v-on="click: onDislike(part)" class="dislike"><i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{ part.dislike_count }}</span></a>
         <span class="pull-right label label-success">by {{ part.author }}</span>
         <div class="clearfix"></div>
         <hr>
     </div>
 
-    <form v-on="submit: onCreate">
-        <div class="form-group">
-            <input type="text" class="form-control input-sm" name="author" v-model="author" placeholder="Представьтесь">
-        </div>
-
-        <div class="form-group">
-            <textarea rows="5" class="form-control textarea-sm" name="text" v-model="text" placeholder="Введите текст"></textarea>
-        </div>
-
-        <div class="form-group text-right">
-            <button type="submit" class="btn btn-primary btn-md">Отправить на голосование</button>
-        </div>
-    </form>
 </div>
 <script type="text/javascript">
     new Vue({
@@ -76,7 +62,7 @@
             getMessages: function() {
                 $.ajax({
                     context: this,
-                    url: "/api/text/parts",
+                    url: "/api/vote/part",
                     success: function (result) {
                         this.$set("parts", result)
                     }
@@ -99,6 +85,28 @@
                         this.text = '';
                         this.like_count = 0;
                         this.dislike_count = 0;
+                    }
+                })
+            },
+
+            onLike: function (part) {
+                $.ajax({
+                    context: part,
+                    type: "PUT",
+                    url: "/api/part/like/" + part.id,
+                    success: function(result) {
+                        this.like_count = result.like_count;
+                    }
+                })
+            },
+
+            onDislike: function (part) {
+                $.ajax({
+                    context: part,
+                    type: "PUT",
+                    url: "/api/part/dislike/" + part.id,
+                    success: function(result) {
+                        this.dislike_count = result.dislike_count;
                     }
                 })
             }
