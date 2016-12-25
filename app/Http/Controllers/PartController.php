@@ -17,14 +17,36 @@ class PartController extends BaseController
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index($page = 1)
     {
-        return response()->json(Part::orderBy('created_at')->selected()->get());
+        $count = ceil(Part::selected()->count() / 2);
+
+        $prev = $page - 1;
+        $next = $page + 1;
+
+        return response()->json([
+            "current" => $page,
+            "count" => $count,
+            "next" => ($next <= $count) ? "/api/text/parts/$next" : null,
+            "prev" => ($prev > 0) ? "/api/text/parts/$prev" : null,
+            "list" => Part::orderBy('created_at')->selected()->limit(2)->offset($prev * 2)->get()
+        ]);
     }
 
-    public function vote()
+    public function vote($page = 1)
     {
-        return response()->json(Part::orderBy('created_at')->onVote()->get());
+        $count = ceil(Part::onVote()->count() / 2);
+
+        $prev = $page - 1;
+        $next = $page + 1;
+
+        return response()->json([
+            "current" => $page,
+            "count" => $count,
+            "next" => ($next <= $count) ? "/api/vote/parts/$next" : null,
+            "prev" => ($prev > 0) ? "/api/vote/parts/$prev" : null,
+            "list" => Part::orderBy('created_at', 'desc')->onVote()->limit(2)->offset($prev * 2)->get()
+        ]);
     }
 
     /**
@@ -37,7 +59,7 @@ class PartController extends BaseController
     }
 
     /**
-     * @param  int  $id
+     * @param  int $id
      * @return JsonResponse
      */
     public function destroy($id)
