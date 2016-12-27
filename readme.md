@@ -8,7 +8,12 @@
 1. Php framework - lumen
 2. Js framework - vue.js
 3. Бд - Postgres, Redis
+4. Nodejs, socket.io
 
 ### Установка проекта
 1. установить lumen (в проекте используется Php7)
 2. Запустить миграции
+
+### @todo
+1. Сделать авторизацию
+2. Написать тесты
