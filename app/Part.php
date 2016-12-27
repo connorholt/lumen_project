@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class Part extends Model
 {
@@ -38,16 +39,19 @@ class Part extends Model
 
     public static function getLastPartNumber()
     {
-        return Cache::get('number');
+        $redis = Redis::connection();
+
+        return $redis->get('number');
     }
 
     public static function incLastPartNumber()
     {
-        if (!self::getLastPartNumber()) {
-            Cache::store('redis')->put('number', 0);
-        }
+        $redis = Redis::connection();
 
-        Cache::increment('number');
+        $number = (int) self::getLastPartNumber();
+        $number += 1;
+
+        $redis->set('number', $number);
     }
 
     /**

@@ -35,7 +35,7 @@ class PartController extends BaseController
 
     public function vote($page = 1)
     {
-        $count = ceil(Part::onVote()->count() / 2);
+        $count = ceil(Part::where('number', Part::getLastPartNumber())->onVote()->count() / 2);
 
         $prev = $page - 1;
         $next = $page + 1;
@@ -45,7 +45,7 @@ class PartController extends BaseController
             "count" => $count,
             "next" => ($next <= $count) ? "/api/vote/parts/$next" : null,
             "prev" => ($prev > 0) ? "/api/vote/parts/$prev" : null,
-            "list" => Part::orderBy('created_at', 'desc')->onVote()->limit(2)->offset($prev * 2)->get()
+            "list" => Part::orderBy('created_at', 'desc')->where('number', Part::getLastPartNumber())->limit(2)->offset($prev * 2)->get()
         ]);
     }
 
@@ -56,6 +56,9 @@ class PartController extends BaseController
     public function store(Request $request)
     {
         $part = Part::create($request->all());
+        // @todo beforeSave
+        $part->number = Part::getLastPartNumber();
+        $part->save();
 
         $redis = Redis::connection();
         $redis->publish('message', json_encode($part, JSON_PRETTY_PRINT));
@@ -80,5 +83,25 @@ class PartController extends BaseController
     public function dislike($id)
     {
         return response()->json(Part::addDislike($id));
+    }
+
+    public function selected(Request $request)
+    {
+        $part = Part::find($request->get('id'));
+
+        if (!$part) {
+            return response()->json(); // error
+        }
+
+        if ($part->number == Part::getLastPartNumber()) {
+            return response()->json(); // error
+        }
+
+        $part->is_selected = true;
+        if ($part->save()) {
+            Part::incLastPartNumber();
+        };
+
+        return response()->json($part);
     }
 }
