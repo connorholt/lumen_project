@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\Redis;
 
 class Part extends Model
 {
-    protected $attributes = [
-        'number' => false
-    ];
-
     protected $fillable = [
         'author',
         'text',
@@ -100,7 +96,6 @@ class Part extends Model
     {
         $part = self::find($id);
         $part->is_selected = true;
-
         $part->save();
 
         return $part;
