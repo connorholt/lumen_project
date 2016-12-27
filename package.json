@@ -1,0 +1,30 @@
+{
+  "name": "poets",
+  "version": "1.0.0",
+  "description": "> Проект написан в целях изучения новых технологий, а также для собственных нужд",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "ioredis": "^2.4.3",
+    "redis": "^2.6.3",
+    "socket.io": "^1.7.2",
+    "vue-strap": "^1.1.34"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connorholt/lumen_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/connorholt/lumen_project/issues"
+  },
+  "homepage": "https://github.com/connorholt/lumen_project#readme"
+}
