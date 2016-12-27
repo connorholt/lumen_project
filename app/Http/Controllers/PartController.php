@@ -55,7 +55,12 @@ class PartController extends BaseController
      */
     public function store(Request $request)
     {
-        return response()->json(Part::create($request->all()));
+        $part = Part::create($request->all());
+
+        $redis = Redis::connection();
+        $redis->publish('message', json_encode($part, JSON_PRETTY_PRINT));
+        
+        return response()->json($part);
     }
 
     /**

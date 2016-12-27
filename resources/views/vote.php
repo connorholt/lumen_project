@@ -32,6 +32,13 @@
             background-size: cover;
             color: white;
         }
+
+        .new {
+            border-left: 5px solid #2aabd2;
+            padding-left: 10px;
+            padding-bottom: 0px;
+            margin-bottom: 10px;
+        }
     </style>
 
     <!-- JS -->
@@ -39,6 +46,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.7/vue.js"></script>
     <script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/vuejs-paginator/2.0.0/vuejs-paginator.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
 </head>
 
 <body class="container">
@@ -57,7 +65,7 @@
             <h4>Также вы можете оставить свой вариант</h4>
         </div>
 
-        <div class="part" v-for="part in parts">
+        <div class="part" v-bind:class="{ new: part.is_new }" v-for="part in parts">
             <p>{{ part.text }}</p>
             <a href="javascript:" v-on:click="like(part)" class="likes">
                 <i class="glyphicon glyphicon-thumbs-up"></i>
@@ -73,7 +81,7 @@
         </div>
         <v-paginator :options="options" :resource_url="resource_url" @update="updateResource"></v-paginator>
 
-        <br />
+        <br/>
         <h4>Свой вариант</h4>
         <form v-on:submit="create">
             <div class="form-group">
@@ -108,16 +116,34 @@
 
 <script type="text/javascript">
 
+    var socket = io.connect('http://localhost:8890');
+    socket.on('message', function (data) {
+        var part = JSON.parse(data);
+
+        part.like_count = 0;
+        part.dislike_count = 0;
+        part.is_new = true;
+
+        app.parts.unshift(part);
+
+        console.log(part);
+    });
+
+
     VuePaginator.template = '#paginator';
 
     var app = new Vue({
         el: '#app',
         data: {
+            messages: [],
+            input: "",
+
             parts: [],
             text: '',
             author: '',
             like_count: 0,
             dislike_count: 0,
+
             resource_url: '/api/vote/parts',
             options: {
                 remote_data: 'list',
@@ -138,7 +164,7 @@
             },
 
             create: function (e) {
-                e.preventDefault()
+                e.preventDefault();
                 $.ajax({
                     context: this,
                     type: "POST",
@@ -148,11 +174,9 @@
                     },
                     url: "/api/part",
                     success: function (result) {
-                        this.parts.push(result);
+                        // @todo если ошибка показать сообщенние
                         this.author = '';
                         this.text = '';
-                        this.like_count = 0;
-                        this.dislike_count = 0;
                     }
                 })
             },
@@ -179,6 +203,10 @@
                 })
             }
         }
+    });
+
+    socket.on('chat message', function (msg) {
+        vm.messages.push(msg);
     });
 
 </script>
