@@ -2,14 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
 class Part extends Model
 {
-    private static $lastPartNumber;
+    protected $attributes = [
+        'number' => false
+    ];
 
     protected $fillable = [
         'author',
@@ -19,24 +19,29 @@ class Part extends Model
     ];
 
     /**
-     * Apply the scope to a given Eloquent query builder.
+     * Scope чтобы получить те части которые находятся на голосовании
      *
      * @param  \Illuminate\Database\Eloquent\Builder builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
     public function scopeOnVote($query)
     {
         $query->where('is_selected', false);
-        //$builder->where('number', self::getLastPartNumber());
     }
 
+    /**
+     * Scope чтобы получить выбранные списки
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder builder
+     */
     public function scopeSelected($query)
     {
         $query->where('is_selected', true);
-        //$builder->where('number', self::getLastPartNumber());
     }
 
+    /**
+     * @return mixed
+     */
     public static function getLastPartNumber()
     {
         $redis = Redis::connection();
@@ -44,6 +49,9 @@ class Part extends Model
         return $redis->get('number');
     }
 
+    /**
+     *
+     */
     public static function incLastPartNumber()
     {
         $redis = Redis::connection();
@@ -77,6 +85,22 @@ class Part extends Model
         /** @var self $part */
         $part = self::find($id);
         $part->dislike_count += 1;
+        $part->save();
+
+        return $part;
+    }
+
+    /**
+     * Выбрать часть в текст
+     *
+     * @param $id
+     * @return mixed
+     */
+    public static function selectPart($id)
+    {
+        $part = self::find($id);
+        $part->is_selected = true;
+
         $part->save();
 
         return $part;

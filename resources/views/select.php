@@ -49,7 +49,7 @@
         <ul class="nav nav-pills">
             <li role="presentation"><a href="/">Читать</a></li>
             <li role="presentation"><a href="/vote">Голосовать</a></li>
-            <li role="presentation"><a href="/selected">Выбрать главу</a></li>
+            <li role="presentation"><a href="/select">Выбрать главу</a></li>
             <li role="presentation"><a href="/about">О проекте</a></li>
         </ul>
 
@@ -89,7 +89,7 @@
                     data: {
                         id: this.id
                     },
-                    url: "/api/selected",
+                    url: "/api/select",
                     success: function (result) {
                         window.location = '/';
                     }
