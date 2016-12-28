@@ -1,18 +1,7 @@
 <?php
-/**
- * @todo сделать авторизацию, токены и роутер на vue
- */
+
 $app->get('/', function() use ($app) {
-    return view('index');
-});
-$app->get('/vote', function() use ($app) {
-    return view('vote');
-});
-$app->get('/select', function() use ($app) {
-    return view('select');
-});
-$app->get('/about', function() use ($app) {
-    return view('about');
+    return view('app');
 });
 
 $app->get('api/text/parts[/{page}]', 'PartController@index');
