@@ -47,6 +47,7 @@
     <script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/vuejs-paginator/2.0.0/vuejs-paginator.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
 </head>
 
 <body class="container">
@@ -126,6 +127,10 @@
 
         app.parts.unshift(part);
 
+        $.notify(part.author + " только что добавил свой вариант", {
+            globalPosition: "top center",
+            className: "success"
+        });
         console.log(part);
     });
 
@@ -177,6 +182,12 @@
                         // @todo если ошибка показать сообщенние
                         this.author = '';
                         this.text = '';
+                    },
+                    error: function () {
+                        $.notify("Вариант не добавлен", {
+                            position: "top center",
+                            className: "error"
+                        });
                     }
                 })
             },

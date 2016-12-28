@@ -39,6 +39,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.7/vue.js"></script>
     <script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/vuejs-paginator/2.0.0/vuejs-paginator.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
 </head>
 
 <body class="container">
@@ -82,7 +83,7 @@
         methods: {
 
             create: function (e) {
-                e.preventDefault()
+                e.preventDefault();
                 $.ajax({
                     context: this,
                     type: "POST",
@@ -91,7 +92,17 @@
                     },
                     url: "/api/select",
                     success: function (result) {
-                        window.location = '/';
+                        $.notify("Часть добавлена в основной текст", {
+                            position: "top center",
+                            className: "success"
+                        });
+                        this.id = '';
+                    },
+                    error: function () {
+                        $.notify("Часть не добавлена в основной текст", {
+                            position: "top center",
+                            className: "error"
+                        });
                     }
                 })
             }
