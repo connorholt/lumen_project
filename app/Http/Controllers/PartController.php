@@ -80,6 +80,11 @@ class PartController extends BaseController
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'author' => 'required|min:4',
+            'text' => 'required|min:20',
+        ]);
+
         $part = Part::create($request->all());
 
         return response()->json($part);
@@ -115,6 +120,10 @@ class PartController extends BaseController
      */
     public function selectPart(Request $request)
     {
+        $this->validate($request, [
+            'id' => 'required|exists:parts,id',
+        ]);
+
         return response()->json(Part::selectPart($request->get('id')));
     }
 }

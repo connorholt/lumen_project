@@ -78,7 +78,8 @@
     var app = new Vue({
         el: '#app',
         data: {
-            id: ''
+            id: '',
+            errors: []
         },
         methods: {
 
@@ -98,7 +99,9 @@
                         });
                         this.id = '';
                     },
-                    error: function () {
+                    error: function (data) {
+                        this.errors = data;
+
                         $.notify("Часть не добавлена в основной текст", {
                             position: "top center",
                             className: "error"

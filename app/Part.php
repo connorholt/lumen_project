@@ -65,7 +65,7 @@ class Part extends Model
     public static function addLike($id)
     {
         /** @var self $part */
-        $part = self::find($id);
+        $part = self::findOrFail($id);
         $part->like_count += 1;
         $part->save();
 
@@ -79,7 +79,7 @@ class Part extends Model
     public static function addDislike($id)
     {
         /** @var self $part */
-        $part = self::find($id);
+        $part = self::findOrFail($id);
         $part->dislike_count += 1;
         $part->save();
 
@@ -94,7 +94,7 @@ class Part extends Model
      */
     public static function selectPart($id)
     {
-        $part = self::find($id);
+        $part = self::findOrFail($id);
         $part->is_selected = true;
         $part->save();
 
