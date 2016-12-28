@@ -5,14 +5,17 @@
 > Суть проекта в том, чтобы несколько человек могли писать одно произведение по частям, с голосованием и выбором определенной части на каждой итерации
 
 ### Используемые технологии
-1. Php framework - lumen
-2. Js framework - vue.js
-3. Бд - Postgres, Redis
+1. Php framework lumen
+2. vue.js, vuex, webpack
+3. Postgres, Redis
 4. Nodejs, socket.io
 
 ### Установка проекта
 1. установить lumen (в проекте используется Php7)
 2. Запустить миграции
+3. npm install
+4. собрать фронтенд webpack
+5. node server.js для запуска socket.io
 
 ### @todo
 1. Сделать авторизацию
