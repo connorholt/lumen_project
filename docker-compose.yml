@@ -1,0 +1,25 @@
+version: '2'
+
+
+services:
+  socketio:
+    image: socketio
+    ports:
+      - "8890:8890"
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  lumen:
+    build: lumen-server
+    ports:
+      - "8080:8080"
+    links:
+      - database
+
+  database:
+    image: postgres
+    ports:
+      - "5433:5433"
