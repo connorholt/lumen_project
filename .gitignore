@@ -1,5 +1,7 @@
-/vendor
-/.idea
-Homestead.json
-Homestead.yaml
-.env
+lumen-server/vendor
+.idea
+lumen-server/Homestead.json
+lumen-server/Homestead.yaml
+lumen-server/.env
+lumen-server/node_modules
+lumen-server/.git
